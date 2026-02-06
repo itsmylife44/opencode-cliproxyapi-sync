@@ -1,0 +1,38 @@
+{
+  "name": "opencode-cliproxyapi-sync",
+  "version": "1.0.0",
+  "description": "Auto-sync OpenCode configs from CLIProxyAPI Dashboard",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target node"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": "*"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "latest",
+    "typescript": "^5.0.0",
+    "@types/node": "^22.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "opencode",
+    "plugin",
+    "config-sync",
+    "cliproxyapi"
+  ],
+  "license": "MIT",
+  "author": "itsmylife44",
+  "homepage": "https://github.com/itsmylife44/opencode-cliproxyapi-sync#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itsmylife44/opencode-cliproxyapi-sync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itsmylife44/opencode-cliproxyapi-sync/issues"
+  }
+}
