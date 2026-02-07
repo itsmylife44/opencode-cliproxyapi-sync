@@ -128,6 +128,10 @@ import { createHash } from "crypto";
 import { homedir as homedir2 } from "os";
 import { join as join2 } from "path";
 function getOpenCodeConfigDir() {
+  const ocxConfigDir = process.env.OPENCODE_CONFIG_DIR;
+  if (ocxConfigDir) {
+    return ocxConfigDir;
+  }
   const xdgConfigHome = process.env.XDG_CONFIG_HOME;
   if (xdgConfigHome) {
     return join2(xdgConfigHome, "opencode");

@@ -99,6 +99,16 @@ If only `oh-my-opencode.json` changes, no notification is shown (those changes a
 
 (Respects `XDG_CONFIG_HOME` environment variable if set)
 
+## OCX Profile Support
+
+When using [OCX](https://github.com/kdcokenny/ocx) profiles, the plugin automatically detects the profile directory via the `OPENCODE_CONFIG_DIR` environment variable that OCX sets.
+
+This means configs are synced to the correct profile location:
+- **Without profile**: `~/.config/opencode/opencode.json`
+- **With profile**: `~/.config/opencode/profiles/<name>/opencode.json`
+
+No additional configuration needed - just use `ocx oc -p myprofile` as usual.
+
 ## Troubleshooting
 
 ### Plugin doesn't sync

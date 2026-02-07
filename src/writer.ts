@@ -4,6 +4,12 @@ import { homedir } from "os";
 import { join } from "path";
 
 export function getOpenCodeConfigDir(): string {
+  // OCX sets OPENCODE_CONFIG_DIR when using profiles (e.g. ~/.config/opencode/profiles/spam/)
+  const ocxConfigDir = process.env.OPENCODE_CONFIG_DIR;
+  if (ocxConfigDir) {
+    return ocxConfigDir;
+  }
+  
   const xdgConfigHome = process.env.XDG_CONFIG_HOME;
   if (xdgConfigHome) {
     return join(xdgConfigHome, "opencode");
