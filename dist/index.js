@@ -9,9 +9,13 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, chmodSync } from "f
 import { homedir } from "os";
 import { join } from "path";
 function getConfigDir() {
+  const ocxConfigDir = process.env.OPENCODE_CONFIG_DIR;
+  if (ocxConfigDir) {
+    return join(ocxConfigDir, "opencode-cliproxyapi-sync");
+  }
   const xdgConfigHome = process.env.XDG_CONFIG_HOME;
   const baseDir = xdgConfigHome || join(homedir(), ".config");
-  return join(baseDir, "opencode-cliproxyapi-sync");
+  return join(baseDir, "opencode", "opencode-cliproxyapi-sync");
 }
 function getConfigPath() {
   return join(getConfigDir(), "config.json");
@@ -166,16 +170,6 @@ var ConfigSyncPlugin = async (ctx) => {
       console.log("[cliproxyapi-sync] No config found. Skipping sync.");
       return {};
     }
-    setTimeout(() => {
-      ctx.client.tui.showToast({
-        body: {
-          title: "CLIProxyAPI Sync",
-          message: "Connected to dashboard",
-          variant: "success",
-          duration: 3000
-        }
-      });
-    }, 1000);
     const versionResult = await checkVersion(config.dashboardUrl, config.syncToken);
     if (!versionResult) {
       console.error("[cliproxyapi-sync] Failed to check version. Skipping sync.");
@@ -198,18 +192,20 @@ var ConfigSyncPlugin = async (ctx) => {
       await writeConfigAtomic(ohMyConfigPath, JSON.stringify(bundle.ohMyOpencode, null, 2));
     }
     const newOpencodeHash = await readFileHash(opencodeConfigPath);
-    if (oldOpencodeHash !== null && oldOpencodeHash !== newOpencodeHash) {
-      ctx.client.tui.showToast({
-        body: {
-          title: "Config Sync",
-          message: "opencode.json updated. Restart OpenCode to apply provider changes.",
-          variant: "warning",
-          duration: 8000
-        }
-      });
-    }
     config.lastKnownVersion = bundle.version;
     savePluginConfig(config);
+    if (oldOpencodeHash !== null && oldOpencodeHash !== newOpencodeHash) {
+      setTimeout(() => {
+        ctx.client.tui.showToast({
+          body: {
+            title: "CLIProxyAPI Config Updated",
+            message: "Restart OpenCode to apply changes",
+            variant: "warning",
+            duration: 8000
+          }
+        });
+      }, 1000);
+    }
     console.log(`[cliproxyapi-sync] Synced to version ${bundle.version}`);
   } catch (error) {
     console.error("[cliproxyapi-sync] Sync error:", error);

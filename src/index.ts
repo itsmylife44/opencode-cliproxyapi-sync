@@ -16,17 +16,6 @@ const ConfigSyncPlugin: Plugin = async (ctx) => {
       return {};
     }
 
-    setTimeout(() => {
-      ctx.client.tui.showToast({
-        body: {
-          title: "CLIProxyAPI Sync",
-          message: "Connected to dashboard",
-          variant: "success",
-          duration: 3000,
-        },
-      });
-    }, 1000);
-
     const versionResult = await checkVersion(
       config.dashboardUrl,
       config.syncToken
@@ -69,20 +58,21 @@ const ConfigSyncPlugin: Plugin = async (ctx) => {
 
     const newOpencodeHash = await readFileHash(opencodeConfigPath);
 
-    if (oldOpencodeHash !== null && oldOpencodeHash !== newOpencodeHash) {
-      ctx.client.tui.showToast({
-        body: {
-          title: "Config Sync",
-          message:
-            "opencode.json updated. Restart OpenCode to apply provider changes.",
-          variant: "warning",
-          duration: 8000,
-        },
-      });
-    }
-
     config.lastKnownVersion = bundle.version;
     savePluginConfig(config);
+
+    if (oldOpencodeHash !== null && oldOpencodeHash !== newOpencodeHash) {
+      setTimeout(() => {
+        ctx.client.tui.showToast({
+          body: {
+            title: "CLIProxyAPI Config Updated",
+            message: "Restart OpenCode to apply changes",
+            variant: "warning",
+            duration: 8000,
+          },
+        });
+      }, 1000);
+    }
 
     console.log(`[cliproxyapi-sync] Synced to version ${bundle.version}`);
   } catch (error) {

@@ -48,8 +48,19 @@ Add to your `opencode.jsonc` plugin array:
 
 ### 2. Create Plugin Config File
 
-Create the config file at `~/.config/opencode-cliproxyapi-sync/config.json`:
+Create the config file in the **same directory** as your `opencode.json`:
 
+**Standard location:**
+```
+~/.config/opencode/opencode-cliproxyapi-sync/config.json
+```
+
+**With OCX profile:**
+```
+~/.config/opencode/profiles/<profilename>/opencode-cliproxyapi-sync/config.json
+```
+
+**Config content:**
 ```json
 {
   "dashboardUrl": "https://dashboard.yourdomain.com",
@@ -92,21 +103,43 @@ If only `oh-my-opencode.json` changes, no notification is shown (those changes a
 
 ## File Locations
 
-- **Plugin Config**: `~/.config/opencode-cliproxyapi-sync/config.json`
+**Standard (no profile):**
+- **Plugin Config**: `~/.config/opencode/opencode-cliproxyapi-sync/config.json`
 - **OpenCode Config**: `~/.config/opencode/opencode.json`
 - **Oh My OpenCode Config**: `~/.config/opencode/oh-my-opencode.json`
 
-(Respects `XDG_CONFIG_HOME` environment variable if set)
+**With OCX profile:**
+- **Plugin Config**: `~/.config/opencode/profiles/<name>/opencode-cliproxyapi-sync/config.json`
+- **OpenCode Config**: `~/.config/opencode/profiles/<name>/opencode.json`
+- **Oh My OpenCode Config**: `~/.config/opencode/profiles/<name>/oh-my-opencode.json`
+
+(Respects `XDG_CONFIG_HOME` and `OPENCODE_CONFIG_DIR` environment variables)
 
 ## OCX Profile Support
 
-When using [OCX](https://github.com/kdcokenny/ocx) profiles, the plugin automatically detects the profile directory via the `OPENCODE_CONFIG_DIR` environment variable that OCX sets.
+When using [OCX](https://github.com/kdcokenny/ocx) profiles, the plugin uses **per-profile configuration**. This means:
 
-This means configs are synced to the correct profile location:
-- **Without profile**: `~/.config/opencode/opencode.json`
-- **With profile**: `~/.config/opencode/profiles/<name>/opencode.json`
+1. **Each profile has its own plugin config** - you can sync different profiles to different dashboards or disable sync for some profiles
+2. **Syncing only affects the active profile** - starting `ocx oc -p work` will only update configs in the `work` profile directory
+3. **No cross-profile interference** - the standard config is never touched when using a profile
 
-No additional configuration needed - just use `ocx oc -p myprofile` as usual.
+**Setup for OCX profiles:**
+```bash
+# Create config for your profile
+mkdir -p ~/.config/opencode/profiles/myprofile/opencode-cliproxyapi-sync
+cat > ~/.config/opencode/profiles/myprofile/opencode-cliproxyapi-sync/config.json << 'EOF'
+{
+  "dashboardUrl": "https://dashboard.yourdomain.com",
+  "syncToken": "your-token-here",
+  "lastKnownVersion": null
+}
+EOF
+
+# Now start with profile - only this profile syncs
+ocx oc -p myprofile
+```
+
+**Disable sync for a profile:** Simply don't create a `config.json` in that profile's `opencode-cliproxyapi-sync` folder.
 
 ## Troubleshooting
 
@@ -114,7 +147,11 @@ No additional configuration needed - just use `ocx oc -p myprofile` as usual.
 
 **Check config file exists and is valid**:
 ```bash
-cat ~/.config/opencode-cliproxyapi-sync/config.json
+# Standard location
+cat ~/.config/opencode/opencode-cliproxyapi-sync/config.json
+
+# Or with OCX profile
+cat ~/.config/opencode/profiles/<profilename>/opencode-cliproxyapi-sync/config.json
 ```
 
 **Check OpenCode logs** for sync messages:

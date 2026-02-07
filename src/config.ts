@@ -9,9 +9,13 @@ export interface PluginConfig {
 }
 
 function getConfigDir(): string {
+  const ocxConfigDir = process.env.OPENCODE_CONFIG_DIR;
+  if (ocxConfigDir) {
+    return join(ocxConfigDir, "opencode-cliproxyapi-sync");
+  }
   const xdgConfigHome = process.env.XDG_CONFIG_HOME;
   const baseDir = xdgConfigHome || join(homedir(), ".config");
-  return join(baseDir, "opencode-cliproxyapi-sync");
+  return join(baseDir, "opencode", "opencode-cliproxyapi-sync");
 }
 
 function getConfigPath(): string {
