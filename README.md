@@ -24,14 +24,13 @@ npx opencode install opencode-cliproxyapi-sync
 
 ### Option 2: Manual Configuration
 
-Add to your `~/.config/opencode/opencode.json` plugins array:
+Add to your `opencode.jsonc` plugin array:
 
 ```json
 {
   "plugin": [
-    "opencode-cliproxyapi-sync",
-    "oh-my-opencode@latest",
-    "..."
+    "opencode-cliproxyapi-sync@latest",
+    "oh-my-opencode@latest"
   ]
 }
 ```
