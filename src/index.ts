@@ -16,6 +16,15 @@ const ConfigSyncPlugin: Plugin = async (ctx) => {
       return {};
     }
 
+    ctx.client.tui.showToast({
+      body: {
+        title: "CLIProxyAPI Sync",
+        message: "Connected to dashboard",
+        variant: "success",
+        duration: 3000,
+      },
+    });
+
     const versionResult = await checkVersion(
       config.dashboardUrl,
       config.syncToken

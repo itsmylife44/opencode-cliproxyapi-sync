@@ -166,6 +166,14 @@ var ConfigSyncPlugin = async (ctx) => {
       console.log("[cliproxyapi-sync] No config found. Skipping sync.");
       return {};
     }
+    ctx.client.tui.showToast({
+      body: {
+        title: "CLIProxyAPI Sync",
+        message: "Connected to dashboard",
+        variant: "success",
+        duration: 3000
+      }
+    });
     const versionResult = await checkVersion(config.dashboardUrl, config.syncToken);
     if (!versionResult) {
       console.error("[cliproxyapi-sync] Failed to check version. Skipping sync.");
