@@ -142,6 +142,16 @@ function getOpenCodeConfigDir() {
   }
   return join2(homedir2(), ".config", "opencode");
 }
+function resolveOpencodeConfigPath(configDir) {
+  const isOcx = !!process.env.OPENCODE_CONFIG_DIR;
+  if (isOcx) {
+    const jsoncPath = join2(configDir, "opencode.jsonc");
+    if (existsSync2(jsoncPath)) {
+      return jsoncPath;
+    }
+  }
+  return join2(configDir, "opencode.json");
+}
 async function writeConfigAtomic(filePath, content) {
   const tempPath = `${filePath}.cliproxy-sync.tmp`;
   writeFileSync2(tempPath, content, "utf-8");
@@ -184,7 +194,7 @@ var ConfigSyncPlugin = async (ctx) => {
       return {};
     }
     const configDir = getOpenCodeConfigDir();
-    const opencodeConfigPath = join3(configDir, "opencode.json");
+    const opencodeConfigPath = resolveOpencodeConfigPath(configDir);
     const ohMyConfigPath = join3(configDir, "oh-my-opencode.json");
     const oldOpencodeHash = await readFileHash(opencodeConfigPath);
     await writeConfigAtomic(opencodeConfigPath, JSON.stringify(bundle.opencode, null, 2));

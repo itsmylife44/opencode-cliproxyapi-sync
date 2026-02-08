@@ -17,6 +17,22 @@ export function getOpenCodeConfigDir(): string {
   return join(homedir(), ".config", "opencode");
 }
 
+/**
+ * Resolve which opencode config file to write.
+ * - Under OCX (OPENCODE_CONFIG_DIR set): prefer opencode.jsonc if it exists
+ * - Otherwise: always opencode.json
+ */
+export function resolveOpencodeConfigPath(configDir: string): string {
+  const isOcx = !!process.env.OPENCODE_CONFIG_DIR;
+  if (isOcx) {
+    const jsoncPath = join(configDir, "opencode.jsonc");
+    if (existsSync(jsoncPath)) {
+      return jsoncPath;
+    }
+  }
+  return join(configDir, "opencode.json");
+}
+
 export async function writeConfigAtomic(
   filePath: string,
   content: string

@@ -4,6 +4,7 @@ import { loadPluginConfig, savePluginConfig } from "./config";
 import { checkVersion, fetchBundle } from "./sync";
 import {
   getOpenCodeConfigDir,
+  resolveOpencodeConfigPath,
   writeConfigAtomic,
   readFileHash,
 } from "./writer";
@@ -40,7 +41,7 @@ const ConfigSyncPlugin: Plugin = async (ctx) => {
     }
 
     const configDir = getOpenCodeConfigDir();
-    const opencodeConfigPath = join(configDir, "opencode.json");
+    const opencodeConfigPath = resolveOpencodeConfigPath(configDir);
     const ohMyConfigPath = join(configDir, "oh-my-opencode.json");
 
     const oldOpencodeHash = await readFileHash(opencodeConfigPath);
