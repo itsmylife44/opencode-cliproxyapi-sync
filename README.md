@@ -48,11 +48,11 @@ Add to your `opencode.jsonc` plugin array:
 
 ### 2. Create Plugin Config File
 
-Create the config file in the **same directory** as your `opencode.json`:
+Create the plugin config file:
 
 **Standard location:**
 ```
-~/.config/opencode/opencode-cliproxyapi-sync/config.json
+~/.config/opencode-cliproxyapi-sync/config.json
 ```
 
 **With OCX profile:**
@@ -104,7 +104,7 @@ If only `oh-my-opencode.json` changes, no notification is shown (those changes a
 ## File Locations
 
 **Standard (no profile):**
-- **Plugin Config**: `~/.config/opencode/opencode-cliproxyapi-sync/config.json`
+- **Plugin Config**: `~/.config/opencode-cliproxyapi-sync/config.json`
 - **OpenCode Config**: `~/.config/opencode/opencode.json`
 - **Oh My OpenCode Config**: `~/.config/opencode/oh-my-opencode.json`
 
@@ -148,7 +148,7 @@ ocx oc -p myprofile
 **Check config file exists and is valid**:
 ```bash
 # Standard location
-cat ~/.config/opencode/opencode-cliproxyapi-sync/config.json
+cat ~/.config/opencode-cliproxyapi-sync/config.json
 
 # Or with OCX profile
 cat ~/.config/opencode/profiles/<profilename>/opencode-cliproxyapi-sync/config.json
