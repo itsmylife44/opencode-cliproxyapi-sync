@@ -15,7 +15,7 @@ function getConfigDir() {
   }
   const xdgConfigHome = process.env.XDG_CONFIG_HOME;
   const baseDir = xdgConfigHome || join(homedir(), ".config");
-  return join(baseDir, "opencode", "opencode-cliproxyapi-sync");
+  return join(baseDir, "opencode-cliproxyapi-sync");
 }
 function getConfigPath() {
   return join(getConfigDir(), "config.json");
