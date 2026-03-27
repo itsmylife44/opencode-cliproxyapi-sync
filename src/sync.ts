@@ -6,6 +6,7 @@ export interface Bundle {
   version: string;
   opencode: Record<string, unknown>;
   ohMyOpencode: Record<string, unknown> | null;
+  ohMyOpenCodeSlim: Record<string, unknown> | null;
 }
 
 async function fetchWithTimeout(

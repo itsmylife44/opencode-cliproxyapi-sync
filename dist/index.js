@@ -196,10 +196,14 @@ var ConfigSyncPlugin = async (ctx) => {
     const configDir = getOpenCodeConfigDir();
     const opencodeConfigPath = resolveOpencodeConfigPath(configDir);
     const ohMyConfigPath = join3(configDir, "oh-my-opencode.json");
+    const ohMySlimConfigPath = join3(configDir, "oh-my-opencode-slim.json");
     const oldOpencodeHash = await readFileHash(opencodeConfigPath);
     await writeConfigAtomic(opencodeConfigPath, JSON.stringify(bundle.opencode, null, 2));
     if (bundle.ohMyOpencode) {
       await writeConfigAtomic(ohMyConfigPath, JSON.stringify(bundle.ohMyOpencode, null, 2));
+    }
+    if (bundle.ohMyOpenCodeSlim) {
+      await writeConfigAtomic(ohMySlimConfigPath, JSON.stringify(bundle.ohMyOpenCodeSlim, null, 2));
     }
     const newOpencodeHash = await readFileHash(opencodeConfigPath);
     config.lastKnownVersion = bundle.version;

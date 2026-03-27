@@ -43,6 +43,7 @@ const ConfigSyncPlugin: Plugin = async (ctx) => {
     const configDir = getOpenCodeConfigDir();
     const opencodeConfigPath = resolveOpencodeConfigPath(configDir);
     const ohMyConfigPath = join(configDir, "oh-my-opencode.json");
+    const ohMySlimConfigPath = join(configDir, "oh-my-opencode-slim.json");
 
     const oldOpencodeHash = await readFileHash(opencodeConfigPath);
 
@@ -54,6 +55,12 @@ const ConfigSyncPlugin: Plugin = async (ctx) => {
       await writeConfigAtomic(
         ohMyConfigPath,
         JSON.stringify(bundle.ohMyOpencode, null, 2)
+      );
+    }
+    if (bundle.ohMyOpenCodeSlim) {
+      await writeConfigAtomic(
+        ohMySlimConfigPath,
+        JSON.stringify(bundle.ohMyOpenCodeSlim, null, 2)
       );
     }
 
