@@ -2,5 +2,5 @@ node_modules/
 *.tmp
 .env
 .env.*
-bun.lock
+
 *.tgz
