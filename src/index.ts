@@ -1,12 +1,11 @@
 import type { Plugin } from "@opencode-ai/plugin";
-import { join } from "path";
 import { loadPluginConfig, savePluginConfig } from "./config";
 import { checkVersion, fetchBundle } from "./sync";
 import {
+  applyBundle,
+  getOmoDir,
   getOpenCodeConfigDir,
   resolveOpencodeConfigPath,
-  writeConfigAtomic,
-  readFileHash,
 } from "./writer";
 
 const ConfigSyncPlugin: Plugin = async (ctx) => {
@@ -41,35 +40,15 @@ const ConfigSyncPlugin: Plugin = async (ctx) => {
     }
 
     const configDir = getOpenCodeConfigDir();
-    const opencodeConfigPath = resolveOpencodeConfigPath(configDir);
-    const ohMyConfigPath = join(configDir, "oh-my-opencode.json");
-    const ohMySlimConfigPath = join(configDir, "oh-my-opencode-slim.json");
-
-    const oldOpencodeHash = await readFileHash(opencodeConfigPath);
-
-    await writeConfigAtomic(
-      opencodeConfigPath,
-      JSON.stringify(bundle.opencode, null, 2)
-    );
-    if (bundle.ohMyOpencode) {
-      await writeConfigAtomic(
-        ohMyConfigPath,
-        JSON.stringify(bundle.ohMyOpencode, null, 2)
-      );
-    }
-    if (bundle.ohMyOpenCodeSlim) {
-      await writeConfigAtomic(
-        ohMySlimConfigPath,
-        JSON.stringify(bundle.ohMyOpenCodeSlim, null, 2)
-      );
-    }
-
-    const newOpencodeHash = await readFileHash(opencodeConfigPath);
+    const changed = await applyBundle(bundle, {
+      configDir,
+      omoDir: getOmoDir(),
+    });
 
     config.lastKnownVersion = bundle.version;
     savePluginConfig(config);
 
-    if (oldOpencodeHash !== null && oldOpencodeHash !== newOpencodeHash) {
+    if (changed.includes(resolveOpencodeConfigPath(configDir))) {
       setTimeout(() => {
         ctx.client.tui.showToast({
           body: {

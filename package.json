@@ -37,5 +37,8 @@
   },
   "bugs": {
     "url": "https://github.com/itsmylife44/opencode-cliproxyapi-sync/issues"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1"
   }
 }
