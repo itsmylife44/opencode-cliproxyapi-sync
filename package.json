@@ -1,6 +1,6 @@
 {
   "name": "opencode-cliproxyapi-sync",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Auto-sync OpenCode configs from CLIProxyAPI Dashboard",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -37,5 +37,8 @@
   },
   "bugs": {
     "url": "https://github.com/itsmylife44/opencode-cliproxyapi-sync/issues"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1"
   }
 }

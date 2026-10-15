@@ -4,7 +4,7 @@ Auto-sync OpenCode configs from CLIProxyAPI Dashboard.
 
 ## What it does
 
-This plugin automatically syncs your OpenCode configuration (`opencode.json` and `oh-my-opencode.json`) from the CLIProxyAPI Dashboard. It checks for config updates on OpenCode startup and applies them automatically.
+This plugin automatically syncs your OpenCode configuration (`opencode.json`, the Oh-My-OpenAgent config in `~/.omo/omo.jsonc` and `oh-my-opencode-slim.jsonc`) from the CLIProxyAPI Dashboard. It checks for config updates on OpenCode startup and applies them automatically.
 
 ## Features
 
@@ -81,7 +81,7 @@ Create the plugin config file:
 1. **On OpenCode Startup**: Plugin loads and checks your config
 2. **Version Check**: Fetches current config version from dashboard
 3. **Compare**: If version differs from `lastKnownVersion`, fetches full bundle
-4. **Write Configs**: Atomically writes `opencode.json` and `oh-my-opencode.json`
+4. **Write Configs**: Atomically writes `opencode.json`, the `"[opencode]"` block of `~/.omo/omo.jsonc` and `oh-my-opencode-slim.jsonc`
 5. **Notify**: Shows toast if `opencode.json` changed (requiring restart)
 6. **Update Version**: Saves new version to plugin config
 
@@ -99,21 +99,29 @@ The plugin shows a toast notification **only when** `opencode.json` changes:
 > ⚠️ **Config Sync**  
 > opencode.json updated. Restart OpenCode to apply provider changes.
 
-If only `oh-my-opencode.json` changes, no notification is shown (those changes apply immediately on next session).
+If only the Oh-My-OpenAgent or slim config changes, no notification is shown (those changes apply immediately on next session).
 
 ## File Locations
 
 **Standard (no profile):**
 - **Plugin Config**: `~/.config/opencode-cliproxyapi-sync/config.json`
 - **OpenCode Config**: `~/.config/opencode/opencode.json`
-- **Oh My OpenCode Config**: `~/.config/opencode/oh-my-opencode.json`
+- **Oh-My-OpenAgent Config**: `"[opencode]"` block of `~/.omo/omo.jsonc`
+- **oh-my-opencode-slim Config**: `~/.config/opencode/oh-my-opencode-slim.jsonc`
 
 **With OCX profile:**
 - **Plugin Config**: `~/.config/opencode/profiles/<name>/opencode-cliproxyapi-sync/config.json`
 - **OpenCode Config**: `~/.config/opencode/profiles/<name>/opencode.json`
-- **Oh My OpenCode Config**: `~/.config/opencode/profiles/<name>/oh-my-opencode.json`
+- **Oh-My-OpenAgent Config**: `"[opencode]"` block of `~/.omo/omo.jsonc` (shared by all profiles)
+- **oh-my-opencode-slim Config**: `~/.config/opencode/profiles/<name>/oh-my-opencode-slim.jsonc`
 
 (Respects `XDG_CONFIG_HOME` and `OPENCODE_CONFIG_DIR` environment variables)
+
+### Oh-My-OpenAgent (`~/.omo/omo.jsonc`)
+
+Oh-My-OpenAgent 4.19.3+ only reads `~/.omo/omo.jsonc` (falling back to `omo.json`). The plugin replaces only the `"[opencode]"` block in that file; comments, formatting and other blocks such as `"[native]"` or `"[codex]"` are kept. If `~/.omo/` or the file does not exist, it is created.
+
+Older files (`oh-my-opencode.json`, `oh-my-opencode-slim.json`) are no longer written and are never deleted or modified.
 
 ## OCX Profile Support
 
@@ -176,7 +184,7 @@ cat ~/.config/opencode/profiles/<profilename>/opencode-cliproxyapi-sync/config.j
 ### Notification not showing
 
 - Notification only appears when `opencode.json` changes
-- If only `oh-my-opencode.json` changed, no notification is shown (expected)
+- If only the Oh-My-OpenAgent or slim config changed, no notification is shown (expected)
 
 ## Development
 
